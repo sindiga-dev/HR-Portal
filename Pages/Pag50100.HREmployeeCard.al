@@ -17,12 +17,6 @@ page 50100 "HR Employee Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the employee number.';
-
-                    trigger OnAssistEdit()
-                    begin
-                        if Rec.AssistEdit(xRec) then
-                            CurrPage.Update();
-                    end;
                 }
 
                 field("First Name"; Rec."First Name")
@@ -115,7 +109,7 @@ page 50100 "HR Employee Card"
                 }
             }
 
-            group(Address)
+            group(AddressDetails)  // Changed from 'Address' to avoid conflict
             {
                 Caption = 'Address';
 

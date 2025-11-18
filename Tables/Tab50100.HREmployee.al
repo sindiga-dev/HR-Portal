@@ -16,7 +16,8 @@ table 50100 "HR Employee"
             begin
                 if "No." <> xRec."No." then begin
                     HRSetup.Get();
-                    NoSeriesMgt.TestManual(HRSetup."Employee Nos.");
+                    // Fixed: Use new No. Series codeunit
+                    NoSeries.TestManual(HRSetup."Employee Nos.");
                     "No. Series" := '';
                 end;
             end;
@@ -117,7 +118,8 @@ table 50100 "HR Employee"
                         Error('Termination Date cannot be before Employment Date.');
                     Status := Status::Inactive;
                 end else
-                    Status := Status::Active;
+                    if Status = Status::Inactive then
+                        Status := Status::Active;
             end;
         }
 
@@ -219,21 +221,30 @@ table 50100 "HR Employee"
         }
     }
 
-    trigger OnInsert()
-    begin
-        if "No." = '' then begin
-            HRSetup.Get();
-            HRSetup.TestField("Employee Nos.");
-            NoSeriesMgt.InitSeries(HRSetup."Employee Nos.", xRec."No. Series", 0D, "No.", "No. Series");
-        end;
-
-        if Status = Status::" " then
-            Status := Status::Active;
+trigger OnInsert()
+begin
+    if "No." = '' then begin
+        HRSetup.Get();
+        HRSetup.TestField("Employee Nos.");
+        "No." := NoSeries.GetNextNo(HRSetup."Employee Nos.", WorkDate(), true);
     end;
+
+    // Initialize default status
+    if Status = Status::Active then
+        exit;
+        
+    if Status = Status::Inactive then
+        exit;
+    
+    if Status = Status::"On Leave" then
+        exit;
+        
+    Status := Status::Active;
+end;
 
     var
         HRSetup: Record "HR Setup";
-        NoSeriesMgt: Codeunit NoSeriesManagement;
+        NoSeries: Codeunit "No. Series"; // Fixed: Use new No. Series codeunit
 
     local procedure UpdateFullName()
     begin
