@@ -17,14 +17,14 @@ page 50105 "HR Leave Application Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the leave application number.';
-                    Editable = false;
+                    Editable = true;
                 }
 
                 field("Employee No."; Rec."Employee No.")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the employee number.';
-                    Editable = false;
+                    Editable = true;
                 }
 
                 field("Employee Name"; Rec."Employee Name")

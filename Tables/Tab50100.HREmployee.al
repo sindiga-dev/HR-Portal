@@ -108,7 +108,7 @@ table 50100 "HR Employee"
 
         field(13; "Termination Date"; Date)
         {
-            Caption = 'Termination Date';
+            Caption = 'Termination Date';  
             DataClassification = CustomerContent;
 
             trigger OnValidate()
